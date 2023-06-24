@@ -1,0 +1,16 @@
+{
+    "folders": [
+        { "name": "Root", "path": "." },
+        { "name": "Core", "path": "./core" },
+        { "name": "CLI", "path": "./cli" },
+        { "name": "Web", "path": "./web" },
+    ],
+    "settings": {
+        "rust-analyzer.linkedProjects": [
+            "./Cargo.toml",
+            "./Cargo.toml",
+            "./Cargo.toml",
+            "./Cargo.toml"
+        ]
+    }
+}
