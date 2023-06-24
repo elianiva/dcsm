@@ -31,7 +31,6 @@ pub enum Port {
     String(String),
 }
 
-// tests
 #[cfg(test)]
 mod tests {
     use crate::models::port::{Mode, PortConfig, Protocol};

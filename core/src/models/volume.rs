@@ -1,5 +1,3 @@
-use super::common::StringOrNumber;
-
 pub enum SELinux {
     /// same as using :z (lowercase)
     Shared,
@@ -18,7 +16,7 @@ pub struct VolumeField {
 }
 
 pub struct TmpFs {
-    pub size: StringOrNumber<u64>,
+    pub size: serde_yaml::Value, // string or number
 }
 
 pub struct ServiceVolumeConfig {

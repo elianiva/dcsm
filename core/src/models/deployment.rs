@@ -1,4 +1,4 @@
-use super::common::{ListOrDict, StringOrNumber};
+use super::common::{ListOrDict};
 
 pub enum RollbackOrder {
     StartFirst,
@@ -15,7 +15,7 @@ pub struct UpdateAndRollbackConfig {
 }
 
 pub struct ResourceLimit {
-    pub cpus: StringOrNumber<f64>,
+    pub cpus: serde_yaml::Value, // string or number
     pub memory: String,
     pub pids: u8,
 }
@@ -32,13 +32,13 @@ pub struct GenericResource {
 pub struct Device {
     pub capabilities: Vec<String>,
     pub device_ids: Vec<String>,
-    pub count: StringOrNumber<u8>,
+    pub count: serde_yaml::Value, // string or number
     pub driver: String,
     pub options: ListOrDict,
 }
 
 pub struct Reservation {
-    pub cpus: StringOrNumber<f64>,
+    pub cpus: serde_yaml::Value, // string or number
     pub memory: String,
     pub generic_resource: Vec<GenericResource>,
     // TODO(elianiva): create the struct

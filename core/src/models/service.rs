@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use super::{
     build::Build,
-    common::{ListOrDict, StringOrList, StringOrNumber},
+    common::{ListOrDict, StringOrList},
     deployment::Deployment,
     network::Network,
     port::Port,
@@ -37,9 +37,9 @@ pub struct Service {
     pub dns: StringOrList,
     pub env_file: StringOrList,
     pub environment: ListOrDict,
-    pub expose: StringOrNumber<u8>,
+    pub expose: serde_yaml::Value, // string or number
     pub external_links: Vec<String>,
-    pub group_add: StringOrNumber<u8>,
+    pub group_add: serde_yaml::Value, // string or number
     pub hostname: String,
     pub image: String,
     pub init: bool,
@@ -58,7 +58,7 @@ pub struct Service {
     pub runtime: String,
     pub scale: u8,
     pub security_opt: Vec<String>,
-    pub shm_size: StringOrNumber<u64>,
+    pub shm_size: serde_yaml::Value, // string or number
     pub tty: bool,
     pub volumes_from: Vec<String>,
     pub volumes: Vec<String>,
