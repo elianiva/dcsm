@@ -33,7 +33,7 @@ pub enum Port {
 
 #[cfg(test)]
 mod tests {
-    use crate::models::port::{Mode, PortConfig, Protocol};
+    use super::*;
 
     #[test]
     fn parse_port_config() {

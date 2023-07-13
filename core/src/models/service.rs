@@ -1,12 +1,6 @@
 use std::collections::HashMap;
 
-use super::{
-    build::Build,
-    common::{ListOrDict, StringOrList},
-    deployment::Deployment,
-    network::Network,
-    port::Port,
-};
+use super::{build::Build, deployment::Deployment, network::Network, port::Port};
 
 pub enum ServiceCondition {
     Started,
@@ -28,16 +22,16 @@ pub enum PullPolicy {
 }
 
 pub struct Service {
-    pub annotations: ListOrDict,
+    pub annotations: serde_yaml::Value, // list or dict
     pub build: Build,
     pub command: String,
     pub depends_on: DependsOn,
     pub deploy: Option<Deployment>,
-    pub dns_search: StringOrList,
-    pub dns: StringOrList,
-    pub env_file: StringOrList,
-    pub environment: ListOrDict,
-    pub expose: serde_yaml::Value, // string or number
+    pub dns_search: serde_yaml::Value,  // string or list
+    pub dns: serde_yaml::Value,         // string or list
+    pub env_file: serde_yaml::Value,    // string or list
+    pub environment: serde_yaml::Value, // list or dict
+    pub expose: serde_yaml::Value,      // string or number
     pub external_links: Vec<String>,
     pub group_add: serde_yaml::Value, // string or number
     pub hostname: String,
@@ -45,7 +39,7 @@ pub struct Service {
     pub init: bool,
     pub ipc: String,
     pub isolation: String,
-    pub labels: ListOrDict,
+    pub labels: serde_yaml::Value, // list or dict
     pub links: Vec<String>,
     pub networks: Network,
     pub platform: String,
