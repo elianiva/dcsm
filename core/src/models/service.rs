@@ -1,60 +1,56 @@
 use std::collections::HashMap;
 
-use super::{build::Build, deployment::Deployment, network::Network, port::Port};
+use serde::{Deserialize, Serialize};
 
-pub enum ServiceCondition {
-    Started,
-    Healthy,
-    CompletedSuccessfully,
-}
+use super::healthcheck::Healthcheck;
 
-pub enum DependsOn {
-    ServiceNames(Vec<String>),
-    Services(HashMap<String, ServiceCondition>),
-}
-
-pub enum PullPolicy {
-    Always,
-    IfNotPresent,
-    Never,
-    Build,
-    Missing,
-}
-
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Service {
-    pub annotations: serde_yaml::Value, // list or dict
-    pub build: Build,
-    pub command: String,
-    pub depends_on: DependsOn,
-    pub deploy: Option<Deployment>,
-    pub dns_search: serde_yaml::Value,  // string or list
-    pub dns: serde_yaml::Value,         // string or list
-    pub env_file: serde_yaml::Value,    // string or list
-    pub environment: serde_yaml::Value, // list or dict
-    pub expose: serde_yaml::Value,      // string or number
-    pub external_links: Vec<String>,
-    pub group_add: serde_yaml::Value, // string or number
-    pub hostname: String,
     pub image: String,
-    pub init: bool,
-    pub ipc: String,
-    pub isolation: String,
-    pub labels: serde_yaml::Value, // list or dict
-    pub links: Vec<String>,
-    pub networks: Network,
-    pub platform: String,
-    pub ports: Vec<Port>,
-    pub privileged: bool,
-    pub profiles: Vec<String>,
-    pub pull_policy: PullPolicy,
-    pub read_only: bool,
     pub restart: String,
-    pub runtime: String,
-    pub scale: u8,
-    pub security_opt: Vec<String>,
-    pub shm_size: serde_yaml::Value, // string or number
-    pub tty: bool,
-    pub volumes_from: Vec<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub volumes: Vec<String>,
-    pub working_dir: String,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub ports: Vec<String>,
+    pub environment: HashMap<String, String>,
+    pub command: String,
+    pub healthcheck: Healthcheck,
+}
+
+#[test]
+fn parse_simple_minio_servive() {
+    let minio_config = r#"---
+image: quay.io/minio/minio:RELEASE.2022-02-05T04-40-59Z
+command: server /data --console-address ":9001"
+restart: unless-stopped
+ports:
+    - 9001:9001
+    - 9000:9000
+environment:
+    MINIO_ROOT_USER: diPj59zJzm2kwUZxcg5QRAUtpbVx5Uxd
+    MINIO_ROOT_PASSWORD: xLxBHSp2vAdX2TJSy6EptamrNk5ZXzXo
+healthcheck:
+    test: "curl -f http://localhost:9000/minio/health/live"
+    interval: 30s
+    timeout: 10s
+    retries: 5
+    start_period: 60s
+volumes:
+    - ./data/minio:/data:z"#;
+    let service: Service = serde_yaml::from_str(minio_config).unwrap();
+    assert_eq!(
+        service.image,
+        "quay.io/minio/minio:RELEASE.2022-02-05T04-40-59Z"
+    );
+    assert_eq!(service.command, "server /data --console-address \":9001\"");
+    assert_eq!(service.restart, "unless-stopped");
+    assert_eq!(service.ports, vec!["9001:9001", "9000:9000"]);
+    assert_eq!(
+        service.healthcheck.test,
+        "curl -f http://localhost:9000/minio/health/live"
+    );
+    assert_eq!(service.healthcheck.interval, "30s");
+    assert_eq!(service.healthcheck.timeout, "10s");
+    assert_eq!(service.healthcheck.retries, 5);
+    assert_eq!(service.healthcheck.start_period, "60s");
 }

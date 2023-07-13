@@ -1,10 +1,3 @@
-pub mod build;
-pub mod common;
-pub mod depends_on;
-pub mod deployment;
 pub mod docker_compose;
 pub mod healthcheck;
-pub mod network;
-pub mod port;
 pub mod service;
-pub mod volume;
