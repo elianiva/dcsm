@@ -1,9 +1,0 @@
-{
-    "folders": [
-        { "name": "Root", "path": "." },
-        { "name": "Core", "path": "./core" },
-        { "name": "CLI", "path": "./cli" },
-        { "name": "Web", "path": "./web" },
-        { "name": "Server", "path": "./server" },
-    ],
-}
