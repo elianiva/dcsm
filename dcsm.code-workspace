@@ -4,14 +4,6 @@
         { "name": "Core", "path": "./core" },
         { "name": "CLI", "path": "./cli" },
         { "name": "Web", "path": "./web" },
+        { "name": "Server", "path": "./server" },
     ],
-    "settings": {
-        "rust-analyzer.linkedProjects": [
-            "./Cargo.toml",
-            "./Cargo.toml",
-            "./Cargo.toml",
-            "./Cargo.toml",
-            "./Cargo.toml"
-        ]
-    }
 }
